@@ -43,20 +43,26 @@ def make_image():
 if __name__ == '__main__':
     print __doc__
 
-    img = make_image()
+    img = cv2.imread('test1.png',cv2.CV_LOAD_IMAGE_GRAYSCALE)
+    # img = cv2.resize(img,(500,500))
+    (thresh, img) = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
     h, w = img.shape[:2]
 
-    _, contours0, hierarchy = cv2.findContours( img.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    contours = [cv2.approxPolyDP(cnt, 3, True) for cnt in contours0]
+    contours0, hierarchy = cv2.findContours( img.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
+    print contours0[1], contours0[0], contours0[2]
+    contours = [cv2.approxPolyDP(cnt, 1, True) for cnt in contours0]
+    # contours = [cv2.fitEllipse(cnt) for cnt in contours0]
 
     def update(levels):
         vis = np.zeros((h, w, 3), np.uint8)
         levels = levels - 3
         cv2.drawContours( vis, contours, (-1, 3)[levels <= 0], (128,255,255),
-            3, cv2.LINE_AA, hierarchy, abs(levels) )
+            1, cv2.CV_AA, hierarchy, abs(levels) )
+        cv2.resize(vis,(0,0),fx=0.5,fy=0.5)
         cv2.imshow('contours', vis)
     update(3)
     cv2.createTrackbar( "levels+3", "contours", 3, 7, update )
+    cv2.resize(img,(0,0),fx=0.5,fy=0.5)
     cv2.imshow('image', img)
     0xFF & cv2.waitKey()
     cv2.destroyAllWindows()

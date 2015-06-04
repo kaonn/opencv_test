@@ -27,7 +27,6 @@ circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 10, np.array([]), 100, 30
 for i in range(b):
     cv2.circle(cimg, (circles[0][i][0], circles[0][i][1]), circles[0][i][2], (0, 0, 255), 3, cv2.LINE_AA)
     print "@@@@@"
-    cv2.waitKey(0)
     cv2.imshow("detected circles", cimg)
     print "#####"
     cv2.circle(cimg, (circles[0][i][0], circles[0][i][1]), 2, (0, 255, 0), 3, cv2.LINE_AA) # draw center of circle
