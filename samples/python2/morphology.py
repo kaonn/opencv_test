@@ -31,6 +31,7 @@ if __name__ == '__main__':
     img = cv2.imread(fn)
     img = cv2.resize(img,(0,0),fx=0.2,fy=0.4)
 
+
     if img is None:
         print 'Failed to load image file:', fn
         sys.exit(1)

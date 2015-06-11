@@ -42,7 +42,7 @@ def sample_line(p1, p2, n, noise=0.0):
     t = np.random.rand(n,1)
     return p1 + (p2-p1)*t + np.random.normal(size=(n, 2))*noise
 
-dist_func_names = it.cycle('DIST_L2 DIST_L1 DIST_L12 DIST_FAIR DIST_WELSCH DIST_HUBER'.split())
+dist_func_names = it.cycle('cv.DIST_L2 DIST_L1 DIST_L12 DIST_FAIR DIST_WELSCH DIST_HUBER'.split())
 cur_func_name = dist_func_names.next()
 
 def update(_=None):
