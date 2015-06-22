@@ -96,23 +96,6 @@ def find_long_box_contour(contours, width, below_first_long_box):
 def sort_long_box_contours_key(contours):
     return contours[contours[:,:,1].argmax()][0][1]
 
-def display_image_with_line(img, p1,p2):
-    line_image = img
-    ((a,b),(c,d)) = (p1,p2)
-    cv2.line(line_image, (a,b),(c,d), [0,255,0], thickness=10)
-    # cv2.circle(test, [actbox], -1, (0, 255, 0), 2)
-    line_image = resize(line_image, height = 600)
-
-
-def display_image_with_line_show(img, p1,p2):
-    line_image = img
-    ((a,b),(c,d)) = (p1,p2)
-    cv2.line(line_image, (a,b),(c,d), [0,255,0], thickness=10)
-    # cv2.circle(test, [actbox], -1, (0, 255, 0), 2)
-    line_image = resize(line_image, height = 600)
-    cv2.imshow("line_image", line_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
 
 def find_left_right_points(contour):
@@ -128,9 +111,23 @@ def find_test_border(sorted_long_boxes_contours, previous_border):
             break
     return test_border
 
+def isVert(h,w):
+    return h > w
+
+def rotate(h,w,deg):
+  M = cv2.getRotationMatrix2D((w/2,h/2),deg,1)
+  dst = cv2.warpAffine(img,M,(w,h))
+  return dst
+
 def find_tests(filename):
+    print "afdsa"
     image = cv2.imread(filename)
     (height, width) = image.shape[:2]
+    if not(isVert(height,width)):
+      image = rotate(height,width,-90)
+
+    print "True"
+
     cnts = find_sorted_contours(image)
     long_boxes_contours= find_long_box_contour(cnts, width, int(height*0.14))
     sorted_long_boxes_contours = sorted(long_boxes_contours, key = sort_long_box_contours_key)# reverse = True)#[:5]
